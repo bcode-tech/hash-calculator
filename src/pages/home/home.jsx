@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import CryptoJS from "crypto-js";
 
 //Redux
@@ -7,12 +7,14 @@ import { bindActionCreators } from "redux";
 import * as Actions from "../../redux/actions";
 
 //Components
-import { Button, Text, Image, Box } from "@chakra-ui/react";
+import { Button, Text, Image, Box, Textarea } from "@chakra-ui/react";
 import { MoonIcon, SunIcon } from "@chakra-ui/icons";
-
-import "./home.scss";
+import DoubleSwitch from "../../components/doubleSwitch/doubleSwitch";
 import DragAndDrop from "../../components/dragAndDrop/dragAndDrop";
 import i18n from "../../imports/i18n";
+
+//style
+import "./home.scss";
 
 import { usePlatformDetector } from "../../imports/utils";
 
@@ -28,7 +30,9 @@ function Home(props) {
     const { theme, changeTheme } = props;
 
     const [fileName, setFileName] = useState(false);
-    const [fileHash, setFileHash] = useState(false);
+    const [generatedHash, setGeneratedHash] = useState(false);
+    const [text, setText] = useState("");
+    const [type, setType] = useState(false);
 
     const selectTheme = () => {
         changeTheme(theme === "light" ? "dark" : "light");
@@ -37,12 +41,14 @@ function Home(props) {
     const loadFile = async file => {
         let reader = new FileReader();
 
-        reader.onload = function(event) {
+        reader.onload = function (event) {
             const wordArray = CryptoJS.lib.WordArray.create(
                 event.target.result,
             );
 
-            setFileHash(CryptoJS.SHA256(wordArray).toString(CryptoJS.enc.Hex));
+            setGeneratedHash(
+                CryptoJS.SHA256(wordArray).toString(CryptoJS.enc.Hex),
+            );
         };
 
         reader.readAsArrayBuffer(file);
@@ -50,12 +56,24 @@ function Home(props) {
         setFileName(file.name);
     };
 
+    const calculateHash = () => {
+        setGeneratedHash(CryptoJS.SHA256(text).toString(CryptoJS.enc.Hex));
+    };
+
+    useEffect(() => {
+        setGeneratedHash(false);
+        setFileName(false);
+        setText("");
+    }, [type]);
+
     const platform = usePlatformDetector();
 
     const boxStyle = {
         display: "flex",
         alignItems: "center",
     };
+
+    console.log(text);
 
     return (
         <Box className="home" bg={`${theme}.bg`}>
@@ -85,8 +103,55 @@ function Home(props) {
                     />
                 )}
             </Box>
+            <DoubleSwitch
+                leftValue={"File"}
+                rightValue={"Testo"}
+                value={type}
+                onChange={setType}
+            />
+            {type ? (
+                <Box className={"mainarea"}>
+                    <Textarea
+                        value={text}
+                        onChange={e => {
+                            setText(e.target.value);
+                        }}
+                        placeholder={i18n.t("insert_text")}
+                        size="lg"
+                        className={"textarea"}
+                    />
+                    {generatedHash && (
+                        <Box
+                            color={`${theme}.text`}
+                            backgroundColor={`${theme}.textBg`}
+                            className={"text"}
+                            fontSize={
+                                platform === "isDesktop"
+                                    ? "20px"
+                                    : "isTablet"
+                                    ? "16px"
+                                    : "14px"
+                            }
+                            wordBreak={
+                                platform === "isMobile" ? "break-all" : "unset"
+                            }
+                        >
+                            <Text fontWeight={"bold"}>{`${i18n.t(
+                                "hash",
+                            )}`}</Text>
+                            <Text>{generatedHash}</Text>
+                        </Box>
+                    )}
 
-            {!fileName ? (
+                    <Button
+                        bg={`${theme}.logo`}
+                        size="lg"
+                        onClick={calculateHash}
+                    >
+                        {i18n.t("calculate_text_hash")}
+                    </Button>
+                </Box>
+            ) : !fileName ? (
                 <Box className={"mainarea"}>
                     <Text
                         color={`${theme}.text`}
@@ -150,13 +215,13 @@ function Home(props) {
                         }
                     >
                         <Text fontWeight={"bold"}>{`${i18n.t("hash")}`}</Text>
-                        <Text>{fileHash}</Text>
+                        <Text>{generatedHash}</Text>
                     </Box>
                     <Button
                         bg={`${theme}.logo`}
                         size="lg"
                         onClick={() => {
-                            setFileHash(false);
+                            setGeneratedHash(false);
                             setFileName(false);
                         }}
                         margin={"20px"}
