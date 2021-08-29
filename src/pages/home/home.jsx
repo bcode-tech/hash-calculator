@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import CryptoJS from "crypto-js";
 
 //Redux
@@ -56,6 +56,16 @@ function Home(props) {
         setFileName(file.name);
     };
 
+    const calculateHash = () => {
+        setGeneratedHash(CryptoJS.SHA256(text).toString(CryptoJS.enc.Hex));
+    };
+
+    useEffect(() => {
+        setGeneratedHash(false);
+        setFileName(false);
+        setText("");
+    }, [type]);
+
     const platform = usePlatformDetector();
 
     const boxStyle = {
@@ -100,14 +110,46 @@ function Home(props) {
                 onChange={setType}
             />
             {type ? (
-                <Box>
+                <Box className={"mainarea"}>
                     <Textarea
                         value={text}
                         onChange={e => {
                             setText(e.target.value);
                         }}
-                        placeholder="Here is a sample placeholder"
+                        placeholder={i18n.t("insert_text")}
+                        size="lg"
+                        className={"textarea"}
                     />
+                    {generatedHash && (
+                        <Box
+                            color={`${theme}.text`}
+                            backgroundColor={`${theme}.textBg`}
+                            className={"text"}
+                            fontSize={
+                                platform === "isDesktop"
+                                    ? "20px"
+                                    : "isTablet"
+                                    ? "16px"
+                                    : "14px"
+                            }
+                            wordBreak={
+                                platform === "isMobile" ? "break-all" : "unset"
+                            }
+                        >
+                            <Text fontWeight={"bold"}>{`${i18n.t(
+                                "hash",
+                            )}`}</Text>
+                            <Text>{generatedHash}</Text>
+                        </Box>
+                    )}
+
+                    <Button
+                        bg={`${theme}.logo`}
+                        size="lg"
+                        onClick={calculateHash}
+                    >
+                        {i18n.t("calculate_text_hash")}
+                    </Button>
                 </Box>
             ) : !fileName ? (
                 <Box className={"mainarea"}>
