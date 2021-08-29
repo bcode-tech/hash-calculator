@@ -145,6 +145,7 @@ function Home(props) {
 
                     <Button
                         bg={`${theme}.logo`}
+                        style={{ color: "#fff" }}
                         size="lg"
                         onClick={calculateHash}
                     >
@@ -168,7 +169,7 @@ function Home(props) {
                     />
                     <Text color={`${theme}.text`}>{i18n.t("or")}</Text>
                     <Button bg={`${theme}.logo`} size="lg">
-                        <label>
+                        <label style={{ color: "#fff" }}>
                             {i18n.t("import_file")}
                             <input
                                 style={{ display: "none" }}
@@ -219,6 +220,7 @@ function Home(props) {
                     </Box>
                     <Button
                         bg={`${theme}.logo`}
+                        style={{ color: "#fff" }}
                         size="lg"
                         onClick={() => {
                             setGeneratedHash(false);
