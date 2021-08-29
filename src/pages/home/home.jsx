@@ -7,12 +7,14 @@ import { bindActionCreators } from "redux";
 import * as Actions from "../../redux/actions";
 
 //Components
-import { Button, Text, Image, Box } from "@chakra-ui/react";
+import { Button, Text, Image, Box, Textarea } from "@chakra-ui/react";
 import { MoonIcon, SunIcon } from "@chakra-ui/icons";
-
-import "./home.scss";
+import DoubleSwitch from "../../components/doubleSwitch/doubleSwitch";
 import DragAndDrop from "../../components/dragAndDrop/dragAndDrop";
 import i18n from "../../imports/i18n";
+
+//style
+import "./home.scss";
 
 import { usePlatformDetector } from "../../imports/utils";
 
@@ -28,7 +30,9 @@ function Home(props) {
     const { theme, changeTheme } = props;
 
     const [fileName, setFileName] = useState(false);
-    const [fileHash, setFileHash] = useState(false);
+    const [generatedHash, setGeneratedHash] = useState(false);
+    const [text, setText] = useState("");
+    const [type, setType] = useState(false);
 
     const selectTheme = () => {
         changeTheme(theme === "light" ? "dark" : "light");
@@ -37,12 +41,14 @@ function Home(props) {
     const loadFile = async file => {
         let reader = new FileReader();
 
-        reader.onload = function(event) {
+        reader.onload = function (event) {
             const wordArray = CryptoJS.lib.WordArray.create(
                 event.target.result,
             );
 
-            setFileHash(CryptoJS.SHA256(wordArray).toString(CryptoJS.enc.Hex));
+            setGeneratedHash(
+                CryptoJS.SHA256(wordArray).toString(CryptoJS.enc.Hex),
+            );
         };
 
         reader.readAsArrayBuffer(file);
@@ -56,6 +62,8 @@ function Home(props) {
         display: "flex",
         alignItems: "center",
     };
+
+    console.log(text);
 
     return (
         <Box className="home" bg={`${theme}.bg`}>
@@ -85,8 +93,23 @@ function Home(props) {
                     />
                 )}
             </Box>
-
-            {!fileName ? (
+            <DoubleSwitch
+                leftValue={"File"}
+                rightValue={"Testo"}
+                value={type}
+                onChange={setType}
+            />
+            {type ? (
+                <Box>
+                    <Textarea
+                        value={text}
+                        onChange={e => {
+                            setText(e.target.value);
+                        }}
+                        placeholder="Here is a sample placeholder"
+                    />
+                </Box>
+            ) : !fileName ? (
                 <Box className={"mainarea"}>
                     <Text
                         color={`${theme}.text`}
@@ -150,13 +173,13 @@ function Home(props) {
                         }
                     >
                         <Text fontWeight={"bold"}>{`${i18n.t("hash")}`}</Text>
-                        <Text>{fileHash}</Text>
+                        <Text>{generatedHash}</Text>
                     </Box>
                     <Button
                         bg={`${theme}.logo`}
                         size="lg"
                         onClick={() => {
-                            setFileHash(false);
+                            setGeneratedHash(false);
                             setFileName(false);
                         }}
                         margin={"20px"}
