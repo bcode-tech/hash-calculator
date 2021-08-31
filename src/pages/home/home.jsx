@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import CryptoJS from "crypto-js";
+import { debounce } from "lodash";
 
 //Redux
 import { connect } from "react-redux";
@@ -56,8 +57,8 @@ function Home(props) {
         setFileName(file.name);
     };
 
-    const calculateHash = () => {
-        setGeneratedHash(CryptoJS.SHA256(text).toString(CryptoJS.enc.Hex));
+    const calculateHash = value => {
+        setGeneratedHash(CryptoJS.SHA256(value).toString(CryptoJS.enc.Hex));
     };
 
     useEffect(() => {
@@ -66,14 +67,27 @@ function Home(props) {
         setText("");
     }, [type]);
 
+    useEffect(() => {
+        debounceText(text);
+    }, [text]);
+
+    const debounceText = useCallback(
+        debounce(text => {
+            if (text !== "") {
+                calculateHash(text);
+            } else {
+                setGeneratedHash(false);
+            }
+        }, 500),
+        [],
+    );
+
     const platform = usePlatformDetector();
 
     const boxStyle = {
         display: "flex",
         alignItems: "center",
     };
-
-    console.log(text);
 
     return (
         <Box className="home" bg={`${theme}.bg`}>
@@ -115,41 +129,35 @@ function Home(props) {
                         value={text}
                         onChange={e => {
                             setText(e.target.value);
+                            // debounceText(e.target.value);
                         }}
                         placeholder={i18n.t("insert_text")}
                         size="lg"
                         className={"textarea"}
                     />
-                    {generatedHash && (
-                        <Box
-                            color={`${theme}.text`}
-                            backgroundColor={`${theme}.textBg`}
-                            className={"text"}
-                            fontSize={
-                                platform === "isDesktop"
-                                    ? "20px"
-                                    : "isTablet"
-                                    ? "16px"
-                                    : "14px"
-                            }
-                            wordBreak={
-                                platform === "isMobile" ? "break-all" : "unset"
-                            }
-                        >
+
+                    <Box
+                        color={`${theme}.text`}
+                        backgroundColor={`${theme}.textBg`}
+                        className={"text"}
+                        fontSize={
+                            platform === "isDesktop"
+                                ? "20px"
+                                : "isTablet"
+                                ? "16px"
+                                : "14px"
+                        }
+                        wordBreak={
+                            platform === "isMobile" ? "break-all" : "unset"
+                        }
+                    >
+                        {generatedHash && (
                             <Text fontWeight={"bold"}>{`${i18n.t(
                                 "hash",
                             )}`}</Text>
-                            <Text>{generatedHash}</Text>
-                        </Box>
-                    )}
-
-                    <Button
-                        bg={`${theme}.logo`}
-                        size="lg"
-                        onClick={calculateHash}
-                    >
-                        {i18n.t("calculate_text_hash")}
-                    </Button>
+                        )}
+                        {generatedHash && <Text>{generatedHash}</Text>}
+                    </Box>
                 </Box>
             ) : !fileName ? (
                 <Box className={"mainarea"}>
