@@ -5,10 +5,14 @@
     width: 150px;
     height: 40px;
     border-radius: 50px;
-    border: 1px solid black;
+    border: 2px solid rgb(220, 220, 220);
     display: flex;
     align-items: center;
     background-color: rgba(255, 255, 255, 0.3);
+
+    &:hover {
+        cursor: pointer;
+    }
 
     .element {
         width: 50%;
@@ -16,6 +20,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        z-index: 99;
 
         &.left {
             border-radius: 50px 0 0 50px;
@@ -30,8 +35,8 @@
             background-color: $primary;
             border-radius: 50px;
             opacity: 0.3;
-            z-index: 99;
-            border: 1px solid black;
+            z-index: 98;
+            border: transparent;
 
             &.to-right {
                 animation: 0.5s to-right;
@@ -43,6 +48,14 @@
                 animation-fill-mode: forwards;
             }
         }
+    }
+
+    &.dark {
+        border-color: $primary;
+        
+        .element {
+            color: #FFF;
+        }   
     }
 }
 
