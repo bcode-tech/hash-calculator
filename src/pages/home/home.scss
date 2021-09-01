@@ -9,7 +9,6 @@
     .topbar {
         width: 100%;
         height: 75px;
-
         padding: 0 30px 0 30px;
         margin-bottom: 30px;
         display: flex;
@@ -20,11 +19,15 @@
             font-size: 24px;
             font-weight: bold;
         }
+
+        .icon:hover {
+            cursor: pointer;
+        }
     }
 
     .mainarea {
         width: 100%;
-        height: 80%;
+        height: 70%;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -32,6 +35,7 @@
 
         &.hash {
             justify-content: flex-start;
+            margin-top: 30px;
         }
 
         .text {
@@ -43,13 +47,29 @@
             width: 90%;
             height: 60px;
             border-radius: 7px;
-
             padding: 0 10px 0 10px;
+
+            &.hashText {
+                width: unset;
+            }
         }
 
         .textarea {
             width: 80%;
+            height: 60%;
             max-width: 980px;
+        }
+
+        .importLabel {
+            cursor: pointer;
+        }
+
+        .textHashButton {
+            margin-top: 30px;
+        }
+
+        @media only screen and (max-height: 700px) {
+            height: 65%;
         }
     }
 
@@ -67,8 +87,11 @@
             height: 100%;
             display: flex;
             align-items: center;
-
             padding: 0 30px 0 30px;
+
+            @media only screen and (max-width: 512px) {
+                justify-content: space-between;
+            }
         }
     }
 }

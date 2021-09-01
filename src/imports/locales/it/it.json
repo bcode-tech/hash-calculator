@@ -1,5 +1,5 @@
 {
-    "calculate_hash": "Calcola hash di un file in SHA256",
+    "calculate_file_hash": "Calcola hash di un file in SHA256",
     "calculate_text_hash": "Calcola hash del testo",
     "import_file": "Importa file",
     "calculate_new_hash": "Calcola un altro hash",
@@ -8,6 +8,8 @@
     "hash": "Hash",
     "file_name": "Nome file",
     "insert_text": "Inserisci il testo",
-
-    "footer_version": "Versione: "
+    "footer_version": "Versione: ",
+    "file": "File",
+    "text": "Testo",
+    "calculate_hash": "Calcola hash"
 }

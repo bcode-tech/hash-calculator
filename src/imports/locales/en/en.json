@@ -1,11 +1,15 @@
 {
-    "calculate_hash": "Calculate file's hash in SHA256",
+    "calculate_file_hash": "Calculate file's hash in SHA256",
+    "calculate_text_hash": "Calculate text's hash in SHA256",
     "import_file": "Import file",
     "calculate_new_hash": "Calculate new hash",
     "or": "or",
     "dragAndDrop": "Drag and drop a file",
     "hash": "Hash",
     "file_name": "File name",
-
-    "footer_version": "Version:"
+    "insert_text": "Insert text",
+    "footer_version": "Version: ",
+    "file": "File",
+    "text": "Text",
+    "calculate_hash": "Calculate hash"
 }

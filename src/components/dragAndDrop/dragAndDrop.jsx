@@ -13,6 +13,7 @@ import i18n from "../../imports/i18n";
 const baseStyle = {
     width: "80%",
     height: "60%",
+    maxWidth: "980px",
     border: "2px dashed",
     borderColor: `${colors.grey}`,
     borderRadius: "20px",

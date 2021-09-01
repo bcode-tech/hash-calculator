@@ -6,9 +6,10 @@ export default function DoubleSwitch({
     leftValue,
     value,
     onChange,
+    theme,
 }) {
     return (
-        <div className="double-switch">
+        <div className={`double-switch ${theme !== 'light' ? "dark" : ""}`}>
             <div className="element left" onClick={() => onChange(false)}>
                 {leftValue}
             </div>

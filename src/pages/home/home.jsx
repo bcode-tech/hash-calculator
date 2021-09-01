@@ -1,6 +1,5 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import CryptoJS from "crypto-js";
-import { debounce } from "lodash";
 
 //Redux
 import { connect } from "react-redux";
@@ -24,7 +23,6 @@ import { VERSION } from "../../imports/config";
 
 let url = "/images/logo-bcode-bianco.png",
     link = "https://bcode.cloud",
-    heightPowered = "40px",
     marginPowered = "10px";
 
 function Home(props) {
@@ -67,26 +65,23 @@ function Home(props) {
         setText("");
     }, [type]);
 
-    useEffect(() => {
-        debounceText(text);
-    }, [text]);
-
-    const debounceText = useCallback(
-        debounce(text => {
-            if (text !== "") {
-                calculateHash(text);
-            } else {
-                setGeneratedHash(false);
-            }
-        }, 500),
-        [],
-    );
+    const debounceText = text => {
+        if (text !== "") {
+            calculateHash(text);
+        } else {
+            setGeneratedHash(false);
+        }
+    };
 
     const platform = usePlatformDetector();
 
     const boxStyle = {
         display: "flex",
         alignItems: "center",
+    };
+
+    const openFile = () => {
+        document.getElementById("input_file").click();
     };
 
     return (
@@ -107,6 +102,7 @@ function Home(props) {
                         h={6}
                         color={`${theme}.colorSelector`}
                         onClick={selectTheme}
+                        className="icon"
                     />
                 ) : (
                     <SunIcon
@@ -114,17 +110,26 @@ function Home(props) {
                         h={6}
                         color={`${theme}.colorSelector`}
                         onClick={selectTheme}
+                        className="icon"
                     />
                 )}
             </Box>
             <DoubleSwitch
-                leftValue={"File"}
-                rightValue={"Testo"}
+                leftValue={i18n.t("file")}
+                rightValue={i18n.t("text")}
                 value={type}
                 onChange={setType}
+                theme={theme}
             />
             {type ? (
                 <Box className={"mainarea"}>
+                    <Text
+                        color={`${theme}.text`}
+                        // backgroundColor={`${theme}.textBg`}
+                        className={"text"}
+                    >
+                        {i18n.t("calculate_text_hash")}
+                    </Text>
                     <Textarea
                         value={text}
                         onChange={e => {
@@ -134,12 +139,21 @@ function Home(props) {
                         placeholder={i18n.t("insert_text")}
                         size="lg"
                         className={"textarea"}
+                        color={`${theme}.textAreaColor`}
                     />
+                    <Button
+                        bg={`${theme}.button`}
+                        size="lg"
+                        className="textHashButton"
+                        onClick={() => debounceText(text)}
+                    >
+                        {i18n.t("calculate_hash")}
+                    </Button>
 
                     <Box
                         color={`${theme}.text`}
-                        backgroundColor={`${theme}.textBg`}
-                        className={"text"}
+                        backgroundColor={`${generatedHash && theme}.textBg`}
+                        className={"text hashText"}
                         fontSize={
                             platform === "isDesktop"
                                 ? "20px"
@@ -156,7 +170,18 @@ function Home(props) {
                                 "hash",
                             )}`}</Text>
                         )}
-                        {generatedHash && <Text>{generatedHash}</Text>}
+                        {generatedHash && (
+                            <Text
+                                maxWidth={
+                                    platform === "isMobile"
+                                        ? "300px"
+                                        : platform === "isTablet"
+                                        && "500px"
+                                }
+                            >
+                                {generatedHash}
+                            </Text>
+                        )}
                     </Box>
                 </Box>
             ) : !fileName ? (
@@ -166,7 +191,7 @@ function Home(props) {
                         // backgroundColor={`${theme}.textBg`}
                         className={"text"}
                     >
-                        {i18n.t("calculate_hash")}
+                        {i18n.t("calculate_file_hash")}
                     </Text>
                     <DragAndDrop
                         onChange={file => {
@@ -175,25 +200,26 @@ function Home(props) {
                         backgroundColor={`${theme}.draganddrop`}
                     />
                     <Text color={`${theme}.text`}>{i18n.t("or")}</Text>
-                    <Button bg={`${theme}.logo`} size="lg">
-                        <label>
+                    <Button bg={`${theme}.button`} size="lg" onClick={openFile}>
+                        <label className={"importLabel"}>
                             {i18n.t("import_file")}
-                            <input
-                                style={{ display: "none" }}
-                                type="file"
-                                onChange={e => {
-                                    loadFile(e.target.files[0]);
-                                }}
-                            />
                         </label>
                     </Button>
+                    <input
+                        id="input_file"
+                        style={{ display: "none" }}
+                        type="file"
+                        onChange={e => {
+                            loadFile(e.target.files[0]);
+                        }}
+                    />
                 </Box>
             ) : (
                 <Box className={"mainarea hash"}>
                     <Box
                         color={`${theme}.text`}
                         backgroundColor={`${theme}.textBg`}
-                        className={"text"}
+                        className={"text hashText"}
                         fontSize={
                             platform === "isDesktop"
                                 ? "20px"
@@ -263,12 +289,12 @@ function Home(props) {
                                 style={{
                                     fontSize: 13,
                                     marginRight: 5,
-                                    color: "#ffffff",
+                                    color: `${theme === 'light' ? "#FFF" : "#000"}`,
                                 }}
                             >
                                 {i18n.t("footer_version")}
                             </Text>
-                            <Text style={{ fontSize: 16, color: "#ffffff" }}>
+                            <Text style={{ fontSize: 16, color: `${theme === 'light' ? "#FFF" : "#000"}` }}>
                                 {VERSION}
                             </Text>
                         </Box>
