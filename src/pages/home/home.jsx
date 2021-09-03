@@ -61,19 +61,19 @@ function Home(props) {
     };
 
     useEffect(() => {
-        debounceText(text);
+        calculateHash(text);
     }, [text]);
 
-    const debounceText = useCallback(
-        debounce(text => {
-            if (text !== "") {
-                calculateHash(text);
-            } else {
-                setGeneratedHash(false);
-            }
-        }, 500),
-        [],
-    );
+    // const debounceText = useCallback(
+    //     debounce(text => {
+    //         if (text !== "") {
+    //             calculateHash(text);
+    //         } else {
+    //             setGeneratedHash(false);
+    //         }
+    //     }, 500),
+    //     [],
+    // );
 
     useEffect(() => {
         setGeneratedHash(false);
