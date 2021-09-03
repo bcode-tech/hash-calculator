@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import CryptoJS from "crypto-js";
+import { debounce } from "lodash";
 
 //Redux
 import { connect } from "react-redux";
@@ -60,18 +61,25 @@ function Home(props) {
     };
 
     useEffect(() => {
+        debounceText(text);
+    }, [text]);
+
+    const debounceText = useCallback(
+        debounce(text => {
+            if (text !== "") {
+                calculateHash(text);
+            } else {
+                setGeneratedHash(false);
+            }
+        }, 500),
+        [],
+    );
+
+    useEffect(() => {
         setGeneratedHash(false);
         setFileName(false);
         setText("");
     }, [type]);
-
-    const debounceText = text => {
-        if (text !== "") {
-            calculateHash(text);
-        } else {
-            setGeneratedHash(false);
-        }
-    };
 
     const platform = usePlatformDetector();
 
@@ -141,14 +149,14 @@ function Home(props) {
                         className={"textarea"}
                         color={`${theme}.textAreaColor`}
                     />
-                    <Button
+                    {/* <Button
                         bg={`${theme}.button`}
                         size="lg"
                         className="textHashButton"
                         onClick={() => debounceText(text)}
                     >
                         {i18n.t("calculate_hash")}
-                    </Button>
+                    </Button> */}
 
                     <Box
                         color={`${theme}.text`}
@@ -175,8 +183,7 @@ function Home(props) {
                                 maxWidth={
                                     platform === "isMobile"
                                         ? "300px"
-                                        : platform === "isTablet"
-                                        && "500px"
+                                        : platform === "isTablet" && "500px"
                                 }
                             >
                                 {generatedHash}
@@ -289,12 +296,21 @@ function Home(props) {
                                 style={{
                                     fontSize: 13,
                                     marginRight: 5,
-                                    color: `${theme === 'light' ? "#FFF" : "#000"}`,
+                                    color: `${
+                                        theme === "light" ? "#FFF" : "#000"
+                                    }`,
                                 }}
                             >
                                 {i18n.t("footer_version")}
                             </Text>
-                            <Text style={{ fontSize: 16, color: `${theme === 'light' ? "#FFF" : "#000"}` }}>
+                            <Text
+                                style={{
+                                    fontSize: 16,
+                                    color: `${
+                                        theme === "light" ? "#FFF" : "#000"
+                                    }`,
+                                }}
+                            >
                                 {VERSION}
                             </Text>
                         </Box>
