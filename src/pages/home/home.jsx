@@ -1,6 +1,5 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import CryptoJS from "crypto-js";
-import { debounce } from "lodash";
 
 //Redux
 import { connect } from "react-redux";
@@ -185,6 +184,7 @@ function Home(props) {
                                         ? "300px"
                                         : platform === "isTablet" && "500px"
                                 }
+                                className="generatedHash"
                             >
                                 {generatedHash}
                             </Text>
@@ -256,7 +256,7 @@ function Home(props) {
                         }
                     >
                         <Text fontWeight={"bold"}>{`${i18n.t("hash")}`}</Text>
-                        <Text>{generatedHash}</Text>
+                        <Text className="generatedHash">{generatedHash}</Text>
                     </Box>
                     <Button
                         bg={`${theme}.logo`}
