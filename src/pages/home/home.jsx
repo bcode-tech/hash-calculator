@@ -14,7 +14,7 @@ import DragAndDrop from "../../components/dragAndDrop/dragAndDrop";
 import i18n from "../../imports/i18n";
 
 //style
-import "./home.scss";
+// import "./home.scss";
 
 import { usePlatformDetector } from "../../imports/utils";
 
@@ -63,17 +63,6 @@ function Home(props) {
         calculateHash(text);
     }, [text]);
 
-    // const debounceText = useCallback(
-    //     debounce(text => {
-    //         if (text !== "") {
-    //             calculateHash(text);
-    //         } else {
-    //             setGeneratedHash(false);
-    //         }
-    //     }, 500),
-    //     [],
-    // );
-
     useEffect(() => {
         setGeneratedHash(false);
         setFileName(false);
@@ -82,11 +71,6 @@ function Home(props) {
 
     const platform = usePlatformDetector();
 
-    const boxStyle = {
-        display: "flex",
-        alignItems: "center",
-    };
-
     const openFile = () => {
         document.getElementById("input_file").click();
     };
@@ -94,15 +78,14 @@ function Home(props) {
     return (
         <Box className="home" bg={`${theme}.bg`}>
             <Box bg={`${theme}.topbar`} className={"topbar"}>
-                <Text
-                    color={`${theme}.logo`}
-                    className={"title"}
+                <Image
+                    src={url}
+                    h={platform === "isDesktop" ? "40px" : "25px"}
+                    marginLeft={marginPowered}
                     onClick={() => {
                         window.open("https://bcode.cloud");
                     }}
-                >
-                    BCode
-                </Text>
+                />
                 {theme === "light" ? (
                     <MoonIcon
                         w={6}
@@ -121,6 +104,7 @@ function Home(props) {
                     />
                 )}
             </Box>
+
             <DoubleSwitch
                 leftValue={i18n.t("file")}
                 rightValue={i18n.t("text")}
@@ -128,6 +112,7 @@ function Home(props) {
                 onChange={setType}
                 theme={theme}
             />
+
             {type ? (
                 <Box className={"mainarea"}>
                     <Text
@@ -148,26 +133,11 @@ function Home(props) {
                         className={"textarea"}
                         color={`${theme}.textAreaColor`}
                     />
-                    {/* <Button
-                        bg={`${theme}.button`}
-                        size="lg"
-                        className="textHashButton"
-                        onClick={() => debounceText(text)}
-                    >
-                        {i18n.t("calculate_hash")}
-                    </Button> */}
-
                     <Box
                         color={`${theme}.text`}
                         backgroundColor={`${generatedHash && theme}.textBg`}
                         className={"text hashText"}
-                        fontSize={
-                            platform === "isDesktop"
-                                ? "20px"
-                                : "isTablet"
-                                ? "16px"
-                                : "14px"
-                        }
+                        fontSize={platform === "isDesktop" ? "16px" : "14px"}
                         wordBreak={
                             platform === "isMobile" ? "break-all" : "unset"
                         }
@@ -206,7 +176,9 @@ function Home(props) {
                         }}
                         backgroundColor={`${theme}.draganddrop`}
                     />
-                    <Text color={`${theme}.text`}>{i18n.t("or")}</Text>
+                    <Text color={`${theme}.text`} className="my-3">
+                        {i18n.t("or")}
+                    </Text>
                     <Button bg={`${theme}.button`} size="lg" onClick={openFile}>
                         <label className={"importLabel"}>
                             {i18n.t("import_file")}
@@ -242,21 +214,30 @@ function Home(props) {
                     </Box>
                     <Box
                         color={`${theme}.text`}
-                        backgroundColor={`${theme}.textBg`}
-                        className={"text"}
-                        fontSize={
-                            platform === "isDesktop"
-                                ? "20px"
-                                : "isTablet"
-                                ? "16px"
-                                : "14px"
-                        }
+                        backgroundColor={`${generatedHash && theme}.textBg`}
+                        className={"text hashText"}
+                        fontSize={platform === "isDesktop" ? "16px" : "14px"}
                         wordBreak={
                             platform === "isMobile" ? "break-all" : "unset"
                         }
                     >
-                        <Text fontWeight={"bold"}>{`${i18n.t("hash")}`}</Text>
-                        <Text className="generatedHash">{generatedHash}</Text>
+                        {generatedHash && (
+                            <Text fontWeight={"bold"}>{`${i18n.t(
+                                "hash",
+                            )}`}</Text>
+                        )}
+                        {generatedHash && (
+                            <Text
+                                maxWidth={
+                                    platform === "isMobile"
+                                        ? "300px"
+                                        : platform === "isTablet" && "500px"
+                                }
+                                className="generatedHash"
+                            >
+                                {generatedHash}
+                            </Text>
+                        )}
                     </Box>
                     <Button
                         bg={`${theme}.logo`}
@@ -274,7 +255,7 @@ function Home(props) {
 
             <Box
                 className={"footer"}
-                height={platform === "isDesktop" ? "75px" : "50px"}
+                // height={platform === "isDesktop" ? "75px" : "50px"}
             >
                 <Box
                     className={"in"}
@@ -290,47 +271,38 @@ function Home(props) {
                         platform === "isDesktop" ? "space-between" : "center"
                     }
                 >
+                    <Box
+                        className="flex items-center my-2"
+                        onClick={() => window.open(link)}
+                    >
+                        <Text className="text-white">Powered by </Text>
+                        <Image
+                            src={url}
+                            h={platform === "isDesktop" ? "40px" : "25px"}
+                            marginLeft={marginPowered}
+                        />
+                    </Box>{" "}
                     {platform !== "isMobile" && (
-                        <Box style={{ ...boxStyle, color: "white" }}>
+                        <Box className="flex items-center my-1">
                             <Text
+                                className="text-white"
                                 style={{
                                     fontSize: 13,
                                     marginRight: 5,
-                                    color: `${
-                                        theme === "light" ? "#FFF" : "#000"
-                                    }`,
                                 }}
                             >
                                 {i18n.t("footer_version")}
                             </Text>
                             <Text
+                                className="text-white"
                                 style={{
                                     fontSize: 16,
-                                    color: `${
-                                        theme === "light" ? "#FFF" : "#000"
-                                    }`,
                                 }}
                             >
                                 {VERSION}
                             </Text>
                         </Box>
                     )}
-                    <Box>
-                        <a href={link} target="_blank" rel="noreferrer">
-                            <Box style={boxStyle}>
-                                <Text color={`${theme}.logo`}>Powered by </Text>
-                                <Image
-                                    src={url}
-                                    h={
-                                        platform === "isDesktop"
-                                            ? "40px"
-                                            : "25px"
-                                    }
-                                    marginLeft={marginPowered}
-                                />
-                            </Box>
-                        </a>
-                    </Box>
                 </Box>
             </Box>
         </Box>

@@ -1,0 +1,7 @@
+@tailwind components;
+
+@layer components {
+    #drag-and-drop {
+        @apply w-full h-full m-auto text-base font-regular;
+    }
+}

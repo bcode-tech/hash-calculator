@@ -1,6 +1,6 @@
 import { ChakraProvider } from "@chakra-ui/react";
 
-import "./App.css";
+// import "./App.css";
 
 import Home from "./pages/home/home";
 

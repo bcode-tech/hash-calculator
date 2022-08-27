@@ -4,7 +4,6 @@ import React, { useMemo } from "react";
 import { useDropzone } from "react-dropzone";
 
 // Style
-import "./dragAndDrop.scss";
 import { colors } from "../../imports/constants";
 
 // i18n

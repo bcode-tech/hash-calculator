@@ -1,0 +1,62 @@
+@tailwind components;
+
+@layer components {
+    .double-switch {
+        @apply relative w-40 h-10 flex items-center rounded-[50px] border-2 bg-[#000] bg-opacity-30
+
+        &:hover {
+            @apply cursor-pointer;
+        }
+
+        .element {
+            @apply w-6/12 h-full flex items-center justify-center z-[99]
+            &.left {
+                @apply rounded-tl-[50px] rounded-tr-[50px];
+            }
+
+            &.right {
+                @apply rounded-bl-[50px] rounded-br-[50px];
+            }
+
+            &.pivot {
+                @apply absolute bg-primary rounded-[50px] opacity-30 z-[98] border-transparent
+
+                &.to-right {
+                    animation: 0.5s to-right;
+                    animation-fill-mode: forwards;
+                }
+
+                &.to-left {
+                    animation: 0.5s to-left;
+                    animation-fill-mode: forwards;
+                }
+            }
+        }
+
+        &.dark {
+            border-color: $primary;
+
+            .element {
+                color: #fff;
+            }
+        }
+    }
+
+    @keyframes to-right {
+        from {
+            left: 0;
+        }
+        to {
+            left: 50%;
+        }
+    }
+
+    @keyframes to-left {
+        from {
+            left: 50%;
+        }
+        to {
+            left: 0;
+        }
+    }
+}
