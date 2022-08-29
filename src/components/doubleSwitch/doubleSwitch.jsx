@@ -1,3 +1,4 @@
+import { theme } from "@chakra-ui/react";
 import React from "react";
 
 export default function DoubleSwitch({
@@ -5,6 +6,7 @@ export default function DoubleSwitch({
     leftValue = "",
     value = false,
     onChange,
+    theme = "",
 }) {
     return (
         <div
@@ -14,6 +16,7 @@ export default function DoubleSwitch({
                 cursor: "pointer",
                 borderRadius: "50px",
                 backgroundColor: "rgba(255, 255, 255, 0.7)",
+                color: theme === "light" && "#211B2B",
             }}
         >
             <div
