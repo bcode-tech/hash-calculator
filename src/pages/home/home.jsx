@@ -7,7 +7,7 @@ import { bindActionCreators } from "redux";
 import * as Actions from "../../redux/actions";
 
 //Components
-import { Button, Text, Image, Box, Textarea } from "@chakra-ui/react";
+import { Button, Text, Image, Box, Textarea, color } from "@chakra-ui/react";
 import { MoonIcon, SunIcon } from "@chakra-ui/icons";
 import DoubleSwitch from "../../components/doubleSwitch/doubleSwitch";
 import DragAndDrop from "../../components/dragAndDrop/dragAndDrop";
@@ -281,7 +281,7 @@ function Home(props) {
                         className="flex items-center my-2"
                         onClick={() => window.open(link)}
                     >
-                        <Text className="text-white">Powered by </Text>
+                        <Text style={{ color: "#DAEDE5" }}>Powered by </Text>
                         <Image
                             src={url}
                             h={platform === "isDesktop" ? "40px" : "25px"}
@@ -291,18 +291,18 @@ function Home(props) {
                     {platform !== "isMobile" && (
                         <Box className="flex items-center my-1">
                             <Text
-                                className="text-white"
                                 style={{
                                     fontSize: 13,
                                     marginRight: 5,
+                                    color: "#DAEDE5",
                                 }}
                             >
                                 {i18n.t("footer_version")}
                             </Text>
                             <Text
-                                className="text-white"
                                 style={{
                                     fontSize: 16,
+                                    color: "#DAEDE5",
                                 }}
                             >
                                 {VERSION}
