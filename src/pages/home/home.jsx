@@ -179,11 +179,16 @@ function Home(props) {
                     <Text color={`${theme}.text`} className="my-3">
                         {i18n.t("or")}
                     </Text>
-                    <Button bg={`${theme}.button`} size="lg" onClick={openFile}>
-                        <label className={"importLabel"}>
-                            {i18n.t("import_file")}
-                        </label>
+                    <Button
+                        bg={`${theme}.button`}
+                        className="text-white py-3 "
+                        size="lg"
+                        onClick={openFile}
+                        margin={"20px"}
+                    >
+                        {i18n.t("import_file")}
                     </Button>
+
                     <input
                         id="input_file"
                         style={{ display: "none" }}
@@ -240,7 +245,8 @@ function Home(props) {
                         )}
                     </Box>
                     <Button
-                        bg={`${theme}.logo`}
+                        bg={`${theme}.button`}
+                        className="text-white"
                         size="lg"
                         onClick={() => {
                             setGeneratedHash(false);

@@ -1,5 +1,5 @@
 @import "./pages/home/home.css";
-@import "./components//dragAndDrop/dragAndDrop.css";
+@import "./components/dragAndDrop/dragAndDrop.css";
 
 @tailwind base;
 @tailwind components;
